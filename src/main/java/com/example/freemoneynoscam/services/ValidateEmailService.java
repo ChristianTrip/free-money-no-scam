@@ -2,12 +2,12 @@ package com.example.freemoneynoscam.services;
 
 public class ValidateEmailService {
 
-    public boolean isEmailValid(String email){
+    public static boolean isEmailValid(String email){
 
         return hasAtAndDotSymbol(email);
     }
 
-    private boolean hasAtAndDotSymbol(String email){
+    private static boolean hasAtAndDotSymbol(String email){
 
         int atCount = 0;
         int dotCount = 0;
