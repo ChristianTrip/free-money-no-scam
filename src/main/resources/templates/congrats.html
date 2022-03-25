@@ -3,13 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Email confirmed</title>
+    <link rel="stylesheet" th:href="@{style.css}" href="../static/style.css">
 </head>
 <body>
+<section class="content">
     <h1>Congratulations</h1>
     <p>you will soon recieve lots of money</p>
 
     <form action="/">
         <input type="submit" value="Go back"/>
     </form>
+    <table>
+        <div th:each="email : ${emails}">
+            <a th:text="${email.getAddress()}"></a>
+        </div>
+
+        <a th:text="${latestemail}"></a>
+
+
+    </table>
+</section>
 </body>
 </html>

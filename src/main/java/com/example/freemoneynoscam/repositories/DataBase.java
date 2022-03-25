@@ -1,10 +1,13 @@
 package com.example.freemoneynoscam.repositories;
 
+import com.example.freemoneynoscam.models.Email;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class DataBase {
 
@@ -54,9 +57,11 @@ public class DataBase {
 
     }
 
-    public static void viewData(){
+    public static String viewData(){
 
         connectToDB();
+
+        String toReturn = "";
 
         sqlString = "SELECT * FROM free_money.user_emails";
 
@@ -70,6 +75,11 @@ public class DataBase {
         System.out.println("\t|---------------------------------------------|");
         System.out.printf("\t| %-7s | %-33s |\n", "user_id", "user_email");
         System.out.println("\t|---------------------------------------------|");
+        toReturn += "Display all results:\n" +
+                    "\t|---------------------------------------------|\n" +
+                    String.format("\t| %-7s | %-33s |\n", "user_id", "user_email\n") +
+                    "\t|---------------------------------------------|\n";
+
 
         while(true) {
 
@@ -80,19 +90,63 @@ public class DataBase {
 
 
                 System.out.printf("\t| %-7s | %-33s |", col0, col1);
+                toReturn += String.format("\t| %-7s | %-33s |", col0, col1);
                 System.out.println();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }//end while loop
         System.out.println("\t|---------------------------------------------|");
+        toReturn += "\t|---------------------------------------------|";
 
         try {
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        return toReturn;
     }
+
+    public static ArrayList<Email> getEmails(){
+        connectToDB();
+
+        ArrayList<Email> emails = new ArrayList<>();
+
+        sqlString = "SELECT * FROM free_money.user_emails";
+
+        try {
+            resultSet = statement.executeQuery(sqlString);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        while(true) {
+
+            try {
+                if (!resultSet.next()) break;
+                String col0 = resultSet.getString("user_id");
+                String col1 = resultSet.getString("user_email");
+
+
+                emails.add(new Email(Integer.valueOf(col0), col1));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }//end while loop
+
+
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return emails;
+    }
+
+
  }
 
 
